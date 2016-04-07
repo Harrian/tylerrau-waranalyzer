@@ -47,11 +47,19 @@ typedef struct
 %token  MAKES 
 %token  OPENINGGOLD 
 %token  PLUNDERCONTRIBUTION
+%token	LOSES
+%token  CLOSINGP
+%token  HR
+%token  GAINS
+%token  GOLD
+%token  KNOCKED
+%token  THEMSELVES
+%token  OUT
 %%
 
 
 log
-   : HEAD recordlist { 
+   : recordlist { 
                   printf("Read Head\n");
                 }
    ;
@@ -65,7 +73,7 @@ recordlist
     ;
 
 record
-	: PARAGRAPH TIMESTAMP troopinformation ATTACKING troopinformation LINEBREAK actionresult
+	: PARAGRAPH TIMESTAMP troopinformation ATTACKING troopinformation LINEBREAK actionresult '.' closingknockoutlayer CLOSINGP HR
 						{
 							strcpy( $$.str, $2.str);
 							strcat( $$.str, "," );
@@ -93,7 +101,7 @@ user
 	;
 
 personaltroopcount
-	: '(' personalsoldiercount SOLDIERS personalspycount SPIES ')'
+	: '(' personalsoldiercount personalspycount ')'
 		{
 			strcpy($$.str, $2.str);
 			strcat($$.str, ",");
@@ -102,20 +110,30 @@ personaltroopcount
 	;
 
 personalsoldiercount
-	:	OPENINGSOLDIER COMMANUMBER CLOSINGB '(' OPENINGSOLDIER PERCENTAGE CLOSINGB ')'
+	:	OPENINGSOLDIER COMMANUMBER CLOSINGB '(' OPENINGSOLDIER PERCENTAGE CLOSINGB ')' SOLDIERS
 		{
 			strcpy($$.str, $2.str);
 			strcat($$.str, ",");
 			strcat($$.str, $6.str);
 		}
+	|   OPENINGSOLDIER COMMANUMBER CLOSINGB SOLDIERS
+		{
+			strcpy($$.str, $2.str);
+			strcat($$.str, ",0");
+		}
 	;
 
 personalspycount
-	:	OPENINGSPY COMMANUMBER CLOSINGB '(' OPENINGSPY PERCENTAGE CLOSINGB ')'
+	:	OPENINGSPY COMMANUMBER CLOSINGB '(' OPENINGSPY PERCENTAGE CLOSINGB ')' SPIES
 		{
 			strcpy($$.str, $2.str);
 			strcat($$.str, ",");
 			strcat($$.str, $6.str);
+		}
+	|	OPENINGSPY COMMANUMBER CLOSINGB SPIES
+		{
+			strcpy($$.str, $2.str);
+			strcat($$.str, ",0");
 		}
 	;
 
@@ -138,11 +156,36 @@ action
 	|	STEAL FROM  {strcpy($$.str, $1.str);}
 	;
 
+closingknockoutlayer:
+	closing
+	| closing knockout
+	;
 closing:
-	user makes
+	user makes ',' loses '.' user loses '.'
+	| user gains ',' loses '.' user loses '.'
+	| user loses '.' user loses '.'
 	;
 makes:
-		MAKES OPENINGGOLDTAG COMMANUMBER CLOSINGB PLUNDERCONTRIBUTION
+		MAKES gold PLUNDERCONTRIBUTION
+	;
+gains:
+		GAINS gold GOLD
+	;
+loses:
+		LOSES personalspycount
+	|	LOSES personalsoldiercount
+	|	LOSES personalsoldiercount personalspycount
+	|	LOSES gold GOLD
+	|	LOSES gold GOLD ',' personalsoldiercount
+	|   LOSES gold GOLD ',' personalspycount
+	;
+gold:
+	OPENINGGOLD COMMANUMBER CLOSINGB
+;
+
+knockout:
+	NAME KNOCKED THEMSELVES OUT
+	| NAME KNOCKED NAME OUT
 	;
 %%
 

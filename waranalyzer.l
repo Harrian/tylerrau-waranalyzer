@@ -19,18 +19,37 @@ LETTER [a-zA-Z0-9_-]
 TS [0-9]{2},[ ][0-9]{1,2}:[0-9]{2}:[0-9]{2}[ ][ap]\.m\.
 %%
 
-\<!DOCTYPE[ ]HTML[ ]PUBLIC[ ]\"-\/\/W3C\/\/DTD[ ]HTML[ ]4\.01\/\/EN\"\>(.|[\n])*\<hr\/\> {return HEAD;}		  
+\<!DOCTYPE[ ]HTML[ ]PUBLIC[ ]\"-\/\/W3C\/\/DTD[ ]HTML[ ]4\.01\/\/EN\"\>(.|[\n])*\<hr\/\> {return HEAD;}	
+
 (January|February|March|April|May|June|July|August|September|October|November|December)[ ]{TS} {strcpy(yylval.str, yytext); return TIMESTAMP;}
-\<br\> {return LINEBREAK;}
+\<br\/\> {return LINEBREAK;}
 \<p\>  {return PARAGRAPH;}
-\<span[ ]class\=\"guild\_tag\">\[ {return GUILDTAG;}
-\]\<\/span\>	{return CLOSINGGUILDTAG;}
+\<span[ ]class\=\"guild\_tag\"> {return GUILDTAG;}
+\<\/span\>	{return CLOSINGSPAN;}
 \<b[ ]class\=\"user\"\>	{return USERTAG;}
 \<\/b\>	{return CLOSINGB;}
-[a-zA-Z0-9_-]{1,30} {strcpy(yylval.str,yytext); return NAME;}
-(	return yytext[0];
-)	return yytext[0];
+\<b[ ]class\=\"soldier\"\> {return OPENINGSOLDIER;}
+\<b[ ]class\=\"spy\"\> {return OPENINGSPY;}
+\<b[ ]class\=\"gold\"\>{return OPENINGGOLD;}
+soldiers(\,|[ ]and)? {return SOLDIERS;}
+spies		{return SPIES;}
+attacking	{return ATTACKING;}
+assassinate(s)? {strcpy(yylval.str, "1"); return ASSASSINATE;}
+attack(s)?	 {strcpy(yylval.str, "0"); return ATTACK;}
+steal(s)?	 {strcpy(yylval.str, "2"); return STEAL;}
+scout(s)?	 {strcpy(yylval.str, "3"); return SCOUT;}
+from		 {return FROM;}
+\<span[ ]class\=\"success\"\>successfully {strcpy(yylval.str, "success"); return SUCCESS;}
+\<span[ ]class\=\"failure\"\>fails[ ]to {strcpy(yylval.str, "failure"); return FAILURE;}
 
+({DIGIT}|\,)+	{strcpy(yylval.str, yytext); return COMMANUMBER;}
+{DIGIT}{1,3}\%	{strcpy(yylval.str, yytext); return PERCENTAGE;}
+
+\[[ a-zA-Z0-9_\-]{1,30}\] {strcpy(yylval.str,yytext); return GUILDNAME;}
+[a-zA-Z0-9_\-]{1,30} {strcpy(yylval.str,yytext); return NAME;}
+
+\(	{return yytext[0];}
+\)	{return yytext[0];}
 [ \t\n]     /* ignore whitespace */
 
 <<EOF>>   yyterminate();  /* signal end of dialogue */

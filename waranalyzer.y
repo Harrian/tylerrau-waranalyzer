@@ -86,13 +86,13 @@ record
 	: PARAGRAPH TIMESTAMP troopinformation ATTACKING troopinformation LINEBREAK actionresult '.' closingknockoutlayer CLOSINGP endingtag
 						{
 							strcpy( $$.str, $2.str);
-							strcat( $$.str, ", " );
+							strcat( $$.str, "\t" );
 							strcat( $$.str, $3.str);
-							strcat( $$.str, ", ");
+							strcat( $$.str, "\t");
 							strcat( $$.str, $5.str);
-							strcat( $$.str, ", ");
+							strcat( $$.str, "\t");
 							strcat( $$.str, $7.str);
-							strcat( $$.str, ", ");
+							strcat( $$.str, "\t");
 							strcat( $$.str, $9.str);
 						}
 ;
@@ -104,7 +104,7 @@ endingtag:
 troopinformation
 	: clan user personaltroopcount {
 		strcpy($$.str, $2.str);
-		strcat($$.str, ", ");
+		strcat($$.str, "\t");
 		strcat($$.str, $3.str);}
 	;
 
@@ -120,8 +120,8 @@ personaltroopcount
 	: '(' personalsoldiercount personalspycount ')'
 		{
 			strcpy($$.str, $2.str);
-			strcat($$.str, ", ");
-			strcat($$.str, $4.str);
+			strcat($$.str, "\t");
+			strcat($$.str, $3.str);
 		}
 	;
 
@@ -129,13 +129,13 @@ personalsoldiercount
 	:	OPENINGSOLDIER COMMANUMBER CLOSINGB '(' OPENINGSOLDIER PERCENTAGE CLOSINGB ')' SOLDIERS
 		{
 			strcpy($$.str, $2.str);
-			strcat($$.str, ", ");
+			strcat($$.str, "\t");
 			strcat($$.str, $6.str);
 		}
 	|   OPENINGSOLDIER COMMANUMBER CLOSINGB SOLDIERS
 		{
 			strcpy($$.str, $2.str);
-			strcat($$.str, ", 0");
+			strcat($$.str, "\t0%");
 		}
 	;
 
@@ -143,23 +143,23 @@ personalspycount
 	:	OPENINGSPY COMMANUMBER CLOSINGB '(' OPENINGSPY PERCENTAGE CLOSINGB ')' SPIES
 		{
 			strcpy($$.str, $2.str);
-			strcat($$.str, ", ");
+			strcat($$.str, "\t");
 			strcat($$.str, $6.str);
 		}
 	|	OPENINGSPY COMMANUMBER CLOSINGB SPIES
 		{
 			strcpy($$.str, $2.str);
-			strcat($$.str, ", 0");
+			strcat($$.str, "\t0%");
 		}
 	;
 
 actionresult
 	:	user SUCCESS action CLOSINGSPAN user	{strcpy($$.str, $2.str); 
-												 strcat($$.str, ", ");
+												 strcat($$.str, "\t");
 												 strcat($$.str, $3.str);
 												 }
 	|	user FAILURE action	CLOSINGSPAN user	{strcpy($$.str, $2.str);
-												 strcat($$.str, ", ");
+												 strcat($$.str, "\t");
 												 strcat($$.str, $3.str);
 												}
 	;
@@ -180,6 +180,8 @@ closing:
 	user makes ',' loses '.' user loses '.'
 	| user gains ',' loses '.' user loses '.'
 	| user loses '.' user loses '.'
+	| user loses '.'
+	| user makes ',' loses '.'
 	;
 makes:
 		MAKES gold PLUNDERCONTRIBUTION

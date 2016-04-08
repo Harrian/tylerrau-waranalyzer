@@ -19,7 +19,7 @@ LETTER [a-zA-Z0-9_-]
 TS [0-9]{2},[ ][0-9]{1,2}:[0-9]{2}:[0-9]{2}[ ][ap]\.m\.
 %%
 
-
+\<\!DOCTYPE[ ]HTML[ ]PUBLIC[ ]\"\-\/\/W3C\/\/DTD[ ]HTML[ ]4\.01\/\/EN\"\>(.|\n)*\<\/h2\> {return HEAD;}
 \<hr\/\>	 {return HR;}
 (January|February|March|April|May|June|July|August|September|October|November|December)[ ]{TS} {strcpy(yylval.str, yytext); return TIMESTAMP;}
 \<br\/\> {return LINEBREAK;}
@@ -32,6 +32,7 @@ TS [0-9]{2},[ ][0-9]{1,2}:[0-9]{2}:[0-9]{2}[ ][ap]\.m\.
 \<b[ ]class\=\"soldier\"\> {return OPENINGSOLDIER;}
 \<b[ ]class\=\"spy\"\> {return OPENINGSPY;}
 \<b[ ]class\=\"gold\"\> {return OPENINGGOLD;}
+\<\/body\>	{return CLOSINGBODY;}
 gold	{return GOLD;}
 gains	{return GAINS;}
 plunder[ ]contribution {return PLUNDERCONTRIBUTION;}
@@ -48,6 +49,7 @@ makes		 {return MAKES;}
 knocked		 {return KNOCKED;}
 themselves	 {return THEMSELVES;}
 out\!		 {return OUT;}
+Total[ ]plunder\: {return TOTALPLUNDER;}
 \<span[ ]class\=\"success\"\>successfully {strcpy(yylval.str, "success"); return SUCCESS;}
 \<span[ ]class\=\"failure\"\>fails[ ]to {strcpy(yylval.str, "failure"); return FAILURE;}
 

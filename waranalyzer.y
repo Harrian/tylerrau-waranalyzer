@@ -55,15 +55,25 @@ typedef struct
 %token  KNOCKED
 %token  THEMSELVES
 %token  OUT
+%token	TOTALPLUNDER
+%token 	CLOSINGBODY
 %%
 
 
-log
-   : recordlist { 
+log: header recordlist { 
                   printf("Read Head\n");
                 }
    ;
 
+header:
+	HEAD PARAGRAPH TOTALPLUNDER combinedname gold ',' combinedname gold CLOSINGP HR
+;
+
+combinedname
+	:	NAME
+	| combinedname NAME
+	;
+	
 recordlist
     :  /* empty */
     |  recordlist record  
@@ -73,22 +83,28 @@ recordlist
     ;
 
 record
-	: PARAGRAPH TIMESTAMP troopinformation ATTACKING troopinformation LINEBREAK actionresult '.' closingknockoutlayer CLOSINGP HR
+	: PARAGRAPH TIMESTAMP troopinformation ATTACKING troopinformation LINEBREAK actionresult '.' closingknockoutlayer CLOSINGP endingtag
 						{
 							strcpy( $$.str, $2.str);
-							strcat( $$.str, "," );
+							strcat( $$.str, ", " );
 							strcat( $$.str, $3.str);
-							strcat( $$.str, ",");
+							strcat( $$.str, ", ");
 							strcat( $$.str, $5.str);
-							strcat( $$.str, ",");
+							strcat( $$.str, ", ");
 							strcat( $$.str, $7.str);
+							strcat( $$.str, ", ");
+							strcat( $$.str, $9.str);
 						}
 ;
 
+endingtag:
+	HR
+	| CLOSINGBODY
+	;
 troopinformation
 	: clan user personaltroopcount {
 		strcpy($$.str, $2.str);
-		strcat($$.str, ",");
+		strcat($$.str, ", ");
 		strcat($$.str, $3.str);}
 	;
 
@@ -104,7 +120,7 @@ personaltroopcount
 	: '(' personalsoldiercount personalspycount ')'
 		{
 			strcpy($$.str, $2.str);
-			strcat($$.str, ",");
+			strcat($$.str, ", ");
 			strcat($$.str, $4.str);
 		}
 	;
@@ -113,13 +129,13 @@ personalsoldiercount
 	:	OPENINGSOLDIER COMMANUMBER CLOSINGB '(' OPENINGSOLDIER PERCENTAGE CLOSINGB ')' SOLDIERS
 		{
 			strcpy($$.str, $2.str);
-			strcat($$.str, ",");
+			strcat($$.str, ", ");
 			strcat($$.str, $6.str);
 		}
 	|   OPENINGSOLDIER COMMANUMBER CLOSINGB SOLDIERS
 		{
 			strcpy($$.str, $2.str);
-			strcat($$.str, ",0");
+			strcat($$.str, ", 0");
 		}
 	;
 
@@ -127,23 +143,23 @@ personalspycount
 	:	OPENINGSPY COMMANUMBER CLOSINGB '(' OPENINGSPY PERCENTAGE CLOSINGB ')' SPIES
 		{
 			strcpy($$.str, $2.str);
-			strcat($$.str, ",");
+			strcat($$.str, ", ");
 			strcat($$.str, $6.str);
 		}
 	|	OPENINGSPY COMMANUMBER CLOSINGB SPIES
 		{
 			strcpy($$.str, $2.str);
-			strcat($$.str, ",0");
+			strcat($$.str, ", 0");
 		}
 	;
 
 actionresult
 	:	user SUCCESS action CLOSINGSPAN user	{strcpy($$.str, $2.str); 
-												 strcat($$.str, ",");
+												 strcat($$.str, ", ");
 												 strcat($$.str, $3.str);
 												 }
 	|	user FAILURE action	CLOSINGSPAN user	{strcpy($$.str, $2.str);
-												 strcat($$.str, ",");
+												 strcat($$.str, ", ");
 												 strcat($$.str, $3.str);
 												}
 	;
@@ -157,8 +173,8 @@ action
 	;
 
 closingknockoutlayer:
-	closing
-	| closing knockout
+	closing	{strcpy($$.str, "NOKO");}
+	| closing knockout	{strcpy($$.str, $2.str);}
 	;
 closing:
 	user makes ',' loses '.' user loses '.'
@@ -184,8 +200,8 @@ gold:
 ;
 
 knockout:
-	NAME KNOCKED THEMSELVES OUT
-	| NAME KNOCKED NAME OUT
+	NAME KNOCKED THEMSELVES OUT	{strcpy($$.str, "SKO");}
+	| NAME KNOCKED NAME OUT		{strcpy($$.str, "KO");}
 	;
 %%
 

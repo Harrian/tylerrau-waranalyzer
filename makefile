@@ -1,9 +1,18 @@
 
-go: lex.yy.c waranalyzer.tab.c 
-	gcc waranalyzer.tab.c lex.yy.c -lfl -ly -o go 
+logreader: wartranslatelex.yy.c waranalyzer.tab.c 
+	gcc waranalyzer.tab.c waranalyzerlex.yy.c -lfl -ly -o logreader 
 
-lex.yy.c: waranalyzer.l
-	flex -i waranalyzer.l
+translate: translatetosqllex.yy.c translatetosql.tab.c 
+	gcc translatetosql.tab.c translatetosqllex.yy.c -lfl -ly -o translate
+	
+translatetosqllex.yy.c: translatetosql.l
+	flex -o translatetosqllex.yy.c -i translatetosql.l
+
+translatetosql.tab.c: translatetosql.y
+	bison -dv translatetosql.y
+	
+wartranslatelex.yy.c: waranalyzer.l
+	flex -o wartranslatelex.yy.c -i waranalyzer.l
 
 waranalyzer.tab.c: waranalyzer.y
 	bison -dv waranalyzer.y

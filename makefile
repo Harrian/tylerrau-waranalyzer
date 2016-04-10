@@ -1,6 +1,6 @@
 
 logreader: wartranslatelex.yy.c waranalyzer.tab.c 
-	gcc waranalyzer.tab.c waranalyzerlex.yy.c -lfl -ly -o logreader 
+	gcc waranalyzer.tab.c wartranslatelex.yy.c -lfl -ly -o logreader 
 
 translate: translatetosqllex.yy.c translatetosql.tab.c 
 	gcc translatetosql.tab.c translatetosqllex.yy.c -lfl -ly -o translate

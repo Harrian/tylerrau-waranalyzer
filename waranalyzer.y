@@ -77,7 +77,7 @@ recordlist
     :  /* empty */
     |  recordlist record  
                    {
-                     printf("%s\n",$2.str);  
+                     printf("%s",$2.str);  
                    }
     ;
 
@@ -93,12 +93,13 @@ record
 							strcat( $$.str, $7.str);
 							strcat( $$.str, "\t");
 							strcat( $$.str, $9.str);
+							strcat( $$.str, $11.str);
 						}
 ;
 
 endingtag:
-	HR
-	| CLOSINGBODY
+	HR	{strcpy( $$.str, "\n");}
+	| CLOSINGBODY {strcpy( $$.str, "");}
 	;
 troopinformation
 	: clan user personaltroopcount {

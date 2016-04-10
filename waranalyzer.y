@@ -61,7 +61,6 @@ typedef struct
 
 
 log: header recordlist { 
-                  printf("Read Head\n");
                 }
    ;
 

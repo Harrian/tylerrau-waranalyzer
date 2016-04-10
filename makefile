@@ -18,9 +18,11 @@ waranalyzer.tab.c: waranalyzer.y
 	bison -dv waranalyzer.y
 
 clean:
-	rm -f lex.yy.c 
+	rm -f translatetosqllex.yy.c
+	rm -f translatetosql.tab.c
+	rm -f translatetosql.output
+	rm -f translatetosql.tab.h
+	rm -f wartranslatelex.yy.c
+	rm -f waranalyzer.tab.c
 	rm -f waranalyzer.output
 	rm -f waranalyzer.tab.h
-	rm -f waranalyzer.tab.c
-	rm -f go 
-

@@ -19,8 +19,8 @@ LETTER [a-zA-Z0-9_-]
 TS [0-9]{2},[ ][0-9]{1,2}:[0-9]{2}:[0-9]{2}[ ][ap]\.m\.
 %%
 
-(January|February|March|April|May|June|July|August|September|October|November|December)[ ][0-9]{2}\,[ ][0-9]{1,2}\: {return USELESSTIMESTAMP;}
-[0-9]{2}:[0-9]{2}	{strcpy(yylval.str,yytext);return USEFULTIMESTAMP;}
+(January|February|March|April|May|June|July|August|September|October|November|December)[ ][0-9]{2}\,[ ] {return USELESSTIMESTAMP;}
+[0-9]{1,2}\:[0-9]{2}:[0-9]{2}	{strcpy(yylval.str,yytext);return USEFULTIMESTAMP;}
 [ ][ap]\.m\.		{return AMPM;}
 \,[0-9]{3} {strcpy(yylval.str,&yytext[1]);return TRIPLENUM;}
 [0-9]{1,3}\%	{strcpy(yylval.str,yytext); return PERCENTAGE;}

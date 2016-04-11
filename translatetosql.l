@@ -30,6 +30,7 @@ failure	{return FAILURE;}
 SKO		{return SKO;}
 NOKO	{return NOKO;}
 KO		{return KO;}
+SKOKO	{return SKOKO;}
 [a-zA-Z0-9_\-]{1,30} {strcpy(yylval.str,yytext); return NAME;}
 <<EOF>>   yyterminate();  /* signal end of dialogue */
 [\n]	 return NEWLINE;

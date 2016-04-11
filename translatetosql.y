@@ -61,6 +61,7 @@ typedef struct
 %token  NOKO
 %token  SKO
 %token  KO
+%token  SKOKO
 %token NEWLINE
 %token USELESSTIMESTAMP
 %token USEFULTIMESTAMP
@@ -68,9 +69,11 @@ typedef struct
 %%
 
 
-log: linelist
+log: headerinfo linelist
    ;
 
+headerinfo:
+;
 linelist:
 	| linelist line
 	;
@@ -97,6 +100,7 @@ kodata:
 	NOKO {strcpy($$.str,"0");}
 	|SKO {strcpy($$.str,"1");}
 	|KO  {strcpy($$.str,"2");}
+	|SKOKO {strcpy($$.str,"3");}
 	;
 userdata:
 	'\t' NAME '\t' commanumber '\t' PERCENTAGE '\t' commanumber '\t' PERCENTAGE {

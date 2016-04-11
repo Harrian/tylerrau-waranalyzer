@@ -57,6 +57,7 @@ typedef struct
 %token  OUT
 %token	TOTALPLUNDER
 %token 	CLOSINGBODY
+%token  AND
 %%
 
 
@@ -204,6 +205,7 @@ gold:
 knockout:
 	NAME KNOCKED THEMSELVES OUT	{strcpy($$.str, "SKO");}
 	| NAME KNOCKED NAME OUT		{strcpy($$.str, "KO");}
+	| NAME KNOCKED THEMSELVES AND NAME OUT {strcpy($$.str, "SKOKO");}
 	;
 %%
 

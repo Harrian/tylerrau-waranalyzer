@@ -49,6 +49,7 @@ makes		 {return MAKES;}
 knocked		 {return KNOCKED;}
 themselves	 {return THEMSELVES;}
 out\!		 {return OUT;}
+\<i\>and\<\/i\> {return AND;}
 Total[ ]plunder\: {return TOTALPLUNDER;}
 \<span[ ]class\=\"success\"\>successfully {strcpy(yylval.str, "success"); return SUCCESS;}
 \<span[ ]class\=\"failure\"\>fails[ ]to {strcpy(yylval.str, "failure"); return FAILURE;}

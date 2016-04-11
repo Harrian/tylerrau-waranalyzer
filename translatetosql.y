@@ -79,10 +79,10 @@ linelist:
 	;
 
 line:
-	time userdata userdata '\t' result '\t' type '\t' kodata NEWLINE
-	{printf("('%s',%s,%s,'%s','%s',%s),\n",$1.str,$2.str,$3.str,$5.str,$7.str,$9.str);}
-	| time userdata userdata '\t' result '\t' type '\t' kodata
-	{printf("('%s',%s,%s,'%s','%s',%s)",$1.str,$2.str,$3.str,$5.str,$7.str,$9.str);}
+	time '\t' NUM userdata userdata '\t' result '\t' type '\t' kodata NEWLINE
+	{printf("('%s','%s',%s,%s,'%s','%s',%s),\n",$1.str,$3.str,$4.str,$5.str,$7.str,$9.str,$11.str);}
+	| time '\t' NUM userdata userdata '\t' result '\t' type '\t' kodata
+	{printf("('%s','%s',%s,%s,'%s','%s',%s)",$1.str,$3.str,$4.str,$5.str,$7.str,$9.str,$11.str);}
 ;
 
 time:

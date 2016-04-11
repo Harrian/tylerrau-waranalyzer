@@ -83,18 +83,20 @@ recordlist
     ;
 
 record
-	: PARAGRAPH TIMESTAMP troopinformation ATTACKING troopinformation LINEBREAK actionresult '.' closingknockoutlayer CLOSINGP endingtag
+	: PARAGRAPH TIMESTAMP clan troopinformation ATTACKING clan troopinformation LINEBREAK actionresult '.' closingknockoutlayer CLOSINGP endingtag
 						{
 							strcpy( $$.str, $2.str);
 							strcat( $$.str, "\t" );
-							strcat( $$.str, $3.str);
-							strcat( $$.str, "\t");
-							strcat( $$.str, $5.str);
+							(strcmp($3.str,$6.str)>0)?(strcat($$.str,"0")):(strcat($$.str,"1"));
+							strcat( $$.str, "\t" );
+							strcat( $$.str, $4.str);
 							strcat( $$.str, "\t");
 							strcat( $$.str, $7.str);
 							strcat( $$.str, "\t");
 							strcat( $$.str, $9.str);
+							strcat( $$.str, "\t");
 							strcat( $$.str, $11.str);
+							strcat( $$.str, $13.str);
 						}
 ;
 
@@ -103,14 +105,14 @@ endingtag:
 	| CLOSINGBODY {strcpy( $$.str, "");}
 	;
 troopinformation
-	: clan user personaltroopcount {
-		strcpy($$.str, $2.str);
+	: user personaltroopcount {
+		strcpy($$.str, $1.str);
 		strcat($$.str, "\t");
-		strcat($$.str, $3.str);}
+		strcat($$.str, $2.str);}
 	;
 
 clan
-	: GUILDTAG GUILDNAME CLOSINGSPAN {}
+	: GUILDTAG GUILDNAME CLOSINGSPAN {strcpy($$.str, $2.str);}
 	;
 
 user

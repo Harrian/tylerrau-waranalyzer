@@ -80,9 +80,9 @@ linelist:
 
 line:
 	time userdata userdata '\t' result '\t' type '\t' kodata NEWLINE
-	{printf("('%s',%s,%s,'%s','%s','%s'),\n",$1.str,$2.str,$3.str,$5.str,$7.str,$9.str);}
+	{printf("('%s',%s,%s,'%s','%s',%s),\n",$1.str,$2.str,$3.str,$5.str,$7.str,$9.str);}
 	| time userdata userdata '\t' result '\t' type '\t' kodata
-	{printf("('%s',%s,%s,'%s','%s','%s')",$1.str,$2.str,$3.str,$5.str,$7.str,$9.str);}
+	{printf("('%s',%s,%s,'%s','%s',%s)",$1.str,$2.str,$3.str,$5.str,$7.str,$9.str);}
 ;
 
 time:
@@ -97,10 +97,10 @@ result:
 	;
 
 kodata:
-	NOKO {strcpy($$.str,"0");}
-	|SKO {strcpy($$.str,"1");}
-	|KO  {strcpy($$.str,"2");}
-	|SKOKO {strcpy($$.str,"3");}
+	NOKO {strcpy($$.str,"'0','0'");}
+	|SKO {strcpy($$.str,"'1','0'");}
+	|KO  {strcpy($$.str,"'0','1'");}
+	|SKOKO {strcpy($$.str,"'1','1'");}
 	;
 userdata:
 	'\t' NAME '\t' commanumber '\t' PERCENTAGE '\t' commanumber '\t' PERCENTAGE {

@@ -1,7 +1,7 @@
 <?php
 	require("mysqlconnection.php");
 	//above file must include a definition for the variable $mysqli
-	
+	if(is_numeric($_GET['warid'])){
 	$url  = 'http://api.kingdomsatwar.com/game/logging/guild_war_log/?game_id=1&war_id=' . $_GET['warid'];
 	$path = strval($_GET['warid']);
 	$fp = fopen($path, 'w+');
@@ -39,9 +39,10 @@
 	ko INT)";
 	if($mysqli->query($maketable)===TRUE){
 		echo "Table created</br>";
-		unset($cmdreturn);
+		$cmdreturn = array();
 		exec("./logreader < " . strval($_GET['warid']) . " | ./translate",$cmdreturn);
 		$sqlvalues = implode($cmdreturn);
+		unset($cmdreturn);
 		//echo $sqlvalues;
 		if($mysqli->query("INSERT INTO `" . strval($_GET['warid']) . "` (
 			timestampvalue,
@@ -64,4 +65,6 @@
 		echo "War already loaded or mysql failed<br/>";
 	}
 	$mysqli->close();
+	}
+	else{echo "Injection attempt detected";}
 ?>

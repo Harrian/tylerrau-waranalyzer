@@ -176,21 +176,21 @@ action
 	;
 
 closingknockoutlayer:
-	closing	{strcpy($$.str, "NOKO");}
-	| closing knockout	{strcpy($$.str, $2.str);}
+	closing	{sprintf($$.str,"NOKO\t%s",$1.str);}
+	| closing knockout	{sprintf($$.str,"%s\t%s",$2.str,$1.str);}
 	;
 closing:
-	user makes ',' loses '.' user loses '.'
-	| user gains ',' loses '.' user loses '.'
-	| user loses '.' user loses '.'
-	| user loses '.'
-	| user makes ',' loses '.'
+	user makes ',' loses '.' user loses '.' {strcpy($$.str, $2.str);}
+	| user gains ',' loses '.' user loses '.' {strcpy($$.str, $2.str);}
+	| user loses '.' user loses '.' {strcpy($$.str, "0");}
+	| user loses '.' {strcpy($$.str, "0");}
+	| user makes ',' loses '.' {strcpy($$.str, "0");}
 	;
 makes:
-		MAKES gold PLUNDERCONTRIBUTION
+		MAKES gold PLUNDERCONTRIBUTION {strcpy($$.str, $2.str);}
 	;
 gains:
-		GAINS gold GOLD
+		GAINS gold GOLD {strcpy($$.str, $2.str);}
 	;
 loses:
 		LOSES personalspycount
@@ -201,7 +201,7 @@ loses:
 	|   LOSES gold GOLD ',' personalspycount
 	;
 gold:
-	OPENINGGOLD COMMANUMBER CLOSINGB
+	OPENINGGOLD COMMANUMBER CLOSINGB {strcpy($$.str, $2.str);}
 ;
 
 knockout:
